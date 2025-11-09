@@ -9,6 +9,8 @@ import 'package:ecommerce_app/screens/cart_screen.dart'; // 2. ADD THIS
 import 'package:provider/provider.dart'; // 3. ADD THIS
 import 'package:ecommerce_app/screens/order_history_screen.dart'; // 1. ADD THIS
 import 'package:ecommerce_app/screens/profile_screen.dart'; // 1. ADD THIS
+import 'package:ecommerce_app/widgets/notification_icon.dart'; // 1. ADD THIS
+import 'package:ecommerce_app/screens/chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _userRole = 'user';
   // 2. Get the current user from Firebase Auth
   final User? _currentUser = FirebaseAuth.instance.currentUser;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // 3. This function runs ONCE when the screen is first created
   @override
   void initState() {
@@ -70,7 +73,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         // 1. We'll update this title later in the "Branding" module
-        title: Text(_currentUser != null ? 'Welcome, ${_currentUser!.email}' : 'Home'),
+        // 1. --- THIS IS THE CHANGE ---
+        //    DELETE your old title:
+        /*
+        title: Text(_currentUser != null ? 'Welcome!' : 'Home'),
+        */
+
+        // 2. ADD this new title:
+        title: Image.asset(
+          'assets/images/app_logo.png', // 3. The path to your logo
+          height: 40, // 4. Set a fixed height
+        ),
+        // 5. 'centerTitle' is now handled by our global AppBarTheme
+        
+        // --- END OF CHANGE ---
+
         actions: [
           // 2. --- THIS IS THE MAGIC ---
           //    This is a "collection-if". The IconButton will only
@@ -103,6 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+
+          // 2. --- ADD OUR NEW WIDGET ---
+          const NotificationIcon(),
+          // --- END OF NEW WIDGET ---
 
           // 2. --- ADD THIS NEW BUTTON ---
           IconButton(
@@ -141,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: _signOut, // We are deleting this
           ),
           */
-
           // 6. ADD this new "Profile" IconButton
           IconButton(
             icon: const Icon(Icons.person_outline),
@@ -233,6 +253,50 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+      
+      // 1. --- REPLACE YOUR 'floatingActionButton:' ---
+      floatingActionButton: _userRole == 'user'
+          ? StreamBuilder<DocumentSnapshot>( // 2. A new StreamBuilder
+              // 3. Listen to *this user's* chat document
+              stream: _firestore.collection('chats').doc(_currentUser!.uid).snapshots(),
+              builder: (context, snapshot) {
+                
+                int unreadCount = 0;
+                // 4. Check if the doc exists and has our count field
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  // Ensure data is not null before casting
+                  final data = snapshot.data!.data();
+                  if (data != null) {
+                    unreadCount = (data as Map<String, dynamic>)['unreadByUserCount'] ?? 0;
+                  }
+                }
+       
+                // 5. --- THE FIX for "trailing not defined" ---
+                //    We wrap the FAB in the Badge widget
+                return Badge(
+                  // 6. Show the count in the badge
+                  label: Text('$unreadCount'),
+                  // 7. Only show the badge if the count is > 0
+                  isLabelVisible: unreadCount > 0,
+                  // 8. The FAB is now the *child* of the Badge
+                  child: FloatingActionButton.extended(
+                    icon: const Icon(Icons.support_agent),
+                    label: const Text('Contact Admin'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            chatRoomId: _currentUser!.uid,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+                // --- END OF FIX ---
+              },
+            )
+          : null, // 9. If admin, don't show the FAB
     );
   }
 }
