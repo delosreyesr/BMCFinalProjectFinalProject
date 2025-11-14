@@ -1,66 +1,41 @@
-import 'package:ecommerce_app/providers/cart_provider.dart'; // 1. Need this
+import 'package:ecommerce_app/providers/cart_provider.dart';
 import 'package:ecommerce_app/screens/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:provider/provider.dart'; // 2. Need this
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_fonts/google_fonts.dart'; // 1. ADD THIS IMPORT
+import 'package:google_fonts/google_fonts.dart';
 
-// --- COLLECTIBLES & MEMORABILIA COLOR PALETTE ---
-const Color kHeritageNavy = Color(
-  0xFF1C2B3C,
-); // Trustworthy, premium navy for authenticity
-const Color kAntiqueGold = Color(0xFFC8A97E); // Warm gold for luxury & value
-const Color kArchivalCream = Color(
-  0xFFF8F4EF,
-); // Soft cream background (museum quality)
-const Color kCharcoalGray = Color(0xFF4A4A4A); // Neutral gray for timelessness
-const Color kBurgundy = Color(
-  0xFF8B2635,
-); // Rich accent for rare/important items
+// --- HIGH-END TECH GADGETS COLOR PALETTE ---
+const Color kCyberBlue = Color(0xFF0066FF);
+const Color kNeonPurple = Color(0xFF8A2BE2);
+const Color kDarkCharcoal = Color(0xFF1A1A1A);
+const Color kSpaceGray = Color(0xFF2A2A2A);
+const Color kPureWhite = Color(0xFFFFFFFF);
+const Color kEmeraldGlow = Color(0xFF00FFAA);
 // --- END OF COLOR PALETTE ---
 
 void main() async {
-  // 1. Preserve splash screen (Unchanged)
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // 2. Initialize Firebase (Unchanged)
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // 3. Set web persistence (Unchanged)
-  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-
-  // 4. --- THIS IS THE FIX ---
-  // We manually create the CartProvider instance *before* runApp
   final cartProvider = CartProvider();
-
-  // 5. We call our new initialize method *before* runApp
   cartProvider.initializeAuthListener();
 
-  // 6. This is the old, buggy code we are replacing:
-  /*
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => CartProvider(), // <-- This was the problem
-      child: const MyApp(),
-    ),
-  );
-  */
-
-  // 7. This is the NEW code for runApp
-  runApp(
-    // 8. We use ChangeNotifierProvider.value
-    ChangeNotifierProvider.value(
-      value: cartProvider, // 9. We provide the instance we already created
-      child: const MyApp(),
-    ),
-  );
-
-  // 10. Remove splash screen (Unchanged)
   FlutterNativeSplash.remove();
+  
+  runApp(
+    ChangeNotifierProvider.value(
+      value: cartProvider,
+      child: const MyApp(),
+    ),
+  );
+
+  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
 }
 
 class MyApp extends StatelessWidget {
@@ -68,78 +43,110 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Root of the app
     return MaterialApp(
-
-
       debugShowCheckedModeBanner: false,
-      title: 'Collector\'s Haven',
-      // 1. --- THIS IS THE NEW, COMPLETE THEME ---
+      title: 'Aurora Prime',
       theme: ThemeData(
-        // 2. Set the main color scheme
         colorScheme: ColorScheme.fromSeed(
-          seedColor: kHeritageNavy, // Our new primary color
-          brightness: Brightness.light,
-          primary: kHeritageNavy,
-          onPrimary: Colors.white,
-          secondary: kAntiqueGold,
-          background: kArchivalCream, // Our new app background
+          seedColor: kCyberBlue,
+          brightness: Brightness.dark,
+          primary: kCyberBlue,
+          onPrimary: kPureWhite,
+          secondary: kNeonPurple,
+          onSecondary: kPureWhite,
+          background: kDarkCharcoal,
+          surface: kSpaceGray,
+          onBackground: kPureWhite,
+          onSurface: kPureWhite,
         ),
         useMaterial3: true,
 
-        // 3. Set the background color for all screens
-        scaffoldBackgroundColor: kArchivalCream,
+        scaffoldBackgroundColor: kDarkCharcoal,
 
-        // 4. --- (FIX) APPLY THE GOOGLE FONT ---
-        // This applies "Lato" to all text in the app
-        textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
-
-        // 5. --- (FIX) GLOBAL BUTTON STYLE ---
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kBurgundy, // Use our new cream color
-            foregroundColor: Colors.white, // Text color
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Rounded corners
+        textTheme: GoogleFonts.orbitronTextTheme(
+          Theme.of(context).textTheme.copyWith(
+            bodyLarge: GoogleFonts.inter(color: kPureWhite),
+            bodyMedium: GoogleFonts.inter(color: kPureWhite),
+            bodySmall: GoogleFonts.inter(color: kPureWhite),
+            titleLarge: GoogleFonts.orbitron(
+              color: kPureWhite,
+              fontWeight: FontWeight.bold,
+            ),
+            titleMedium: GoogleFonts.orbitron(
+              color: kPureWhite,
+              fontWeight: FontWeight.w600,
+            ),
+            headlineSmall: GoogleFonts.orbitron(
+              color: kPureWhite,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
 
-        // 6. --- (FIX) GLOBAL TEXT FIELD STYLE ---
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kEmeraldGlow,
+            foregroundColor: kDarkCharcoal,
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            textStyle: GoogleFonts.orbitron(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+
         inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: kSpaceGray,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide.none,
           ),
-          labelStyle: TextStyle(color: kCharcoalGray.withOpacity(0.8)),
+          labelStyle: TextStyle(color: kPureWhite.withOpacity(0.7)),
+          hintStyle: TextStyle(color: kPureWhite.withOpacity(0.5)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: kHeritageNavy, width: 2.0),
+            borderSide: const BorderSide(color: kCyberBlue, width: 2.0),
           ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
 
-        // 7. --- (FIX) GLOBAL CARD STYLE ---
+        // FIXED: Correct CardTheme syntax
         cardTheme: CardThemeData(
-          elevation: 1, // A softer shadow
-          color: Colors.white, // Pure white cards on the off-white bg
+          elevation: 4,
+          color: kSpaceGray,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
-          // 8. This ensures the images inside the card are rounded
+          shadowColor: Colors.black.withOpacity(0.5),
           clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.zero,
         ),
 
-        // 9. --- (NEW) GLOBAL APPBAR STYLE ---
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white, // Clean white AppBar
-          foregroundColor: kHeritageNavy, // Black text
-          elevation: 0, // No shadow, modern look
+        appBarTheme: AppBarTheme(
+          backgroundColor: kDarkCharcoal,
+          foregroundColor: kPureWhite,
+          elevation: 0,
           centerTitle: true,
+          titleTextStyle: GoogleFonts.orbitron(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: kNeonPurple,
+          foregroundColor: kPureWhite,
+        ),
+
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: kSpaceGray,
+          selectedItemColor: kCyberBlue,
+          unselectedItemColor: kPureWhite.withOpacity(0.6),
         ),
       ),
-
-      // --- END OF NEW THEME ---
       home: const AuthWrapper(),
     );
   }

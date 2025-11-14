@@ -32,9 +32,9 @@ flutter:
 
 # Flutter native splash configuration - MUST BE AT ROOT LEVEL
 flutter_native_splash:
-  color: "#F5F1E8"
-  image: assets/images/app_logo.png
+  color: "#FFFFFF"
+  image: assets/images/app_Logo.png
   android_12:
-    color: "#F5F1E8"
-    image: assets/images/app_logo.png
+    color: "#FFFFFF"
+    image: assets/images/app_Logo.png
   web: true

@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBB-Top1D51mIHVaAwWwwm_dOC0cythuD4',
-    appId: '1:398662889533:web:6a32aa19e26bf929987a54',
-    messagingSenderId: '398662889533',
-    projectId: 'collectibles-memorabilia-app',
-    authDomain: 'collectibles-memorabilia-app.firebaseapp.com',
-    storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
-    measurementId: 'G-XXXXXXXXXX',
+    apiKey: 'AIzaSyDREkPXEgdCKVLYv_JKrjZaAKwBo9UZOfg',
+    appId: '1:639827451728:web:0c661b8c031b686ee3d655',
+    messagingSenderId: '639827451728',
+    projectId: 'high-end-tech-gadgets-store',
+    authDomain: 'high-end-tech-gadgets-store.firebaseapp.com',
+    storageBucket: 'high-end-tech-gadgets-store.firebasestorage.app',
+    measurementId: 'G-015KQ1N5TG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDiuPJT3_8kVIOLco3vQRrkEtusP3C16jM',
-    appId: '1:398662889533:android:7fb8cc7e47018e39987a54',
-    messagingSenderId: '398662889533',
-    projectId: 'collectibles-memorabilia-app',
-    storageBucket: 'collectibles-memorabilia-app.firebasestorage.app',
+    apiKey: 'AIzaSyC9D6d_ne-Y86FXiC7fUwv-M_MbxBgCNPY',
+    appId: '1:639827451728:android:4f19c170735c22afe3d655',
+    messagingSenderId: '639827451728',
+    projectId: 'high-end-tech-gadgets-store',
+    storageBucket: 'high-end-tech-gadgets-store.firebasestorage.app',
   );
 
 }

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "398662889533",
-    "project_id": "collectibles-memorabilia-app",
-    "storage_bucket": "collectibles-memorabilia-app.firebasestorage.app"
+    "project_number": "639827451728",
+    "project_id": "high-end-tech-gadgets-store",
+    "storage_bucket": "high-end-tech-gadgets-store.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398662889533:android:7fb8cc7e47018e39987a54",
+        "mobilesdk_app_id": "1:639827451728:android:4f19c170735c22afe3d655",
         "android_client_info": {
           "package_name": "com.example.ecommerce_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDiuPJT3_8kVIOLco3vQRrkEtusP3C16jM"
+          "current_key": "AIzaSyC9D6d_ne-Y86FXiC7fUwv-M_MbxBgCNPY"
         }
       ],
       "services": {
